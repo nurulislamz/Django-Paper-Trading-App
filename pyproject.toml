@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "django-paper-trading-app"
+version = "0.1.0"
+description = "Dependency management for paper-trading-app"
+authors = ["Mohammed Nurul Islam <mohammed19.islam@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+Django = "^5.0.2"
+
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^7.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
