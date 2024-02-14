@@ -2,6 +2,11 @@ from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect
 from .forms import UserEditForm, UserProfileForm
 
+def home(request):
+    return render(request, 'users/home.html')
+
+
+
 # Create your views here.
 class UserLoginView(LoginView):
     template_name = 'user_auth_and_profiles/login.html'
