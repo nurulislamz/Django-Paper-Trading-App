@@ -6,4 +6,4 @@ class UserAuthAndProfilesConfig(AppConfig):
     name = 'user_auth_and_profiles'
     
     def ready(self):
-        import users.signals
+        from . import signals
