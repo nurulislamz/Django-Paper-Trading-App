@@ -4,14 +4,10 @@
 {% block content %}
     <div class="jumbotron">
         <h1 class="display-4">Welcome</h1>
-        <p class="lead">
-            This is <b>user registration and login system</b> build with django which is
-            a Python-based free and open-source web framework that follows the model–template–views architectural pattern.
-        </p>
         <hr class="my-4">
         <p class="lead">
-            <a class="btn btn-primary btn-lg" href="#" role="button">Logout</a>
-            <a class="btn btn-primary btn-lg" href="#" role="button">Sign in</a>
+            <a href="{% url 'sign_up' %}" class="btn btn-primary btn-lg" role="button">Sign Up</a>
+            <a href="#" class="btn btn-primary btn-lg" role="button">Login</a>
         </p>
     </div>
 {% endblock content %}

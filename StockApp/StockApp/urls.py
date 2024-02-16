@@ -9,5 +9,5 @@ from user_auth_and_profiles.views import home, LoginView, SignUpForm
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('user_auth_and_profiles.urls')),
+    path('', include('user_auth_and_profiles.urls'), name = "user_auth"),
 ]
