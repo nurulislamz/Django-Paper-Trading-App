@@ -1,0 +1,16 @@
+{% extends "user_auth_and_profiles/base.html" %}
+{% block title %} Home Page {% endblock title %}
+
+{% block content %}
+    <div class="jumbotron">
+        <h1 class="display-4">Welcome</h1>
+        <p class="lead">
+            Please <b>Login or Sign Up!</b>
+        </p>
+        <hr class="my-4">
+        <p class="lead">
+            <a href="{% url 'sign_up' %}" class="btn btn-primary btn-lg" role="button">Sign Up</a>
+            <a href="#" class="btn btn-primary btn-lg" role="button">Login</a>
+        </p>
+    </div>
+{% endblock content %}
