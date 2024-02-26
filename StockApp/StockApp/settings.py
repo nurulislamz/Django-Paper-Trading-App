@@ -3,6 +3,8 @@ Django settings for StockApp project.
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -11,8 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# replace ths with an environ key
-SECRET_KEY = 'django-insecure-o+5w&c!3u9f%ko!w+o#)+x*t8l=g_ki-_^6(d&9s5s7^#$*u#9'
+SECRET_KEY = str(os.getenv('SECRET_KEY'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -22,17 +23,17 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'api_app',
+    'sentiment_analysis_app',
+    'stock_tracker_app',
+    'stocks_management_app',
+    'user_auth_and_profiles',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'api_app',
-    'sentiment_analysis_app',
-    'stock_tracker_app',
-    'stocks_management_app',
-    'user_auth_and_profiles'
 ]
 
 MIDDLEWARE = [
@@ -48,6 +49,11 @@ MIDDLEWARE = [
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 30
+
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = 'login'
 
 ROOT_URLCONF = 'StockApp.urls'
 
@@ -121,3 +127,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# email configs
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = str(os.getenv('EMAIL_USER'))
+EMAIL_HOST_PASSWORD = str(os.getenv('EMAIL_PASSWORD'))
