@@ -37,9 +37,6 @@
 -- ViewSets and routers for handling API endpoints.
 -- Authentication and permission classes for API access control.
 
-## Things to be Done
-user_auth_and_profiles - email backend, email verification and change_password pages
-
 ## Dependencies
 Version Control - Git
 CICD - Jenkins

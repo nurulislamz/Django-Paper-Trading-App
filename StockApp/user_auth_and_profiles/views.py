@@ -6,6 +6,7 @@ from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView, 
 from django.urls import reverse_lazy
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.decorators import login_required
+from .models import Profile
 
 def home(request):
     return render(request, 'user_auth_and_profiles/home.html')
@@ -31,11 +32,15 @@ class sign_up_view(View):
         form = self.form_class(request.POST)
 
         if form.is_valid():
-            form.save()
+            user = form.save()
 
-            username = form.cleaned_data.get('username')
+            username = form.cleaned_data.get('username')            
+            deposit = form.cleaned_data.get('deposit')
+            
+            user.profile.balance = deposit
+            user.profile.save()
             messages.success(request, f'Account created for {username}')
-
+            
             return redirect(to='home_page')
 
         return render(request, self.template_name, {'form': form})
@@ -57,6 +62,7 @@ class login_view(LoginView):
     
 class logout_view(LogoutView):
     template_name = 'user_auth_and_profiles/logout.html'
+    
 
 class reset_password_view(SuccessMessageMixin, PasswordResetView):
     template_name = 'user_auth_and_profiles/password_reset.html'

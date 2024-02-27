@@ -38,10 +38,20 @@ class SignUpForm(UserCreationForm):
                                                                   'data-toggle': 'password',
                                                                   'id': 'password',
                                                                   }))
+    
+    deposit = forms.DecimalField(max_digits = 1000000,
+                                 min_value = 10,
+                                 decimal_places = 2,
+                                 required = True,
+                                 step_size = 0.01,
+                                 widget=forms.NumberInput(
+                                     attrs={'placeholder': 'Deposit',
+                                            'class': 'form-control'
+                                            }))
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username', 'email', 'password1', 'password2']
+        fields = ['first_name', 'last_name', 'username', 'email', 'password1', 'password2', 'deposit']
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(max_length=100,
