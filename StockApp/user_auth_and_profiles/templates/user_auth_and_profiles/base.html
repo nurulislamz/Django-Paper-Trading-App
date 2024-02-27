@@ -21,7 +21,6 @@
             <a href="{% url 'home_page' %}" class="navbar-brand">Home</a>
             {% if user.is_authenticated %}
                 <a href="{% url 'profile_page' %}" class="nav-item nav-link">Profile</a>
-                
                 <form method="post" action="{% url 'logout_page' %}">
                     {% csrf_token %}
                     <button type="submit">Logout</button>

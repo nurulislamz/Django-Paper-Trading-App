@@ -62,6 +62,7 @@ class login_view(LoginView):
     
 class logout_view(LogoutView):
     template_name = 'user_auth_and_profiles/logout.html'
+    
 
 class reset_password_view(SuccessMessageMixin, PasswordResetView):
     template_name = 'user_auth_and_profiles/password_reset.html'
