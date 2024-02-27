@@ -37,6 +37,11 @@
 -- ViewSets and routers for handling API endpoints.
 -- Authentication and permission classes for API access control.
 
+6) Stock wish lists
+- target prices
+- anticipated returns
+etc. 
+
 ## Dependencies
 Version Control - Git
 CICD - Jenkins
