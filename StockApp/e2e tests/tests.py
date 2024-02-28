@@ -9,7 +9,6 @@ import unittest
 import time
 import os
 
-
 class SignUpTests(StaticLiveServerTestCase):
 
     def setUp(self):

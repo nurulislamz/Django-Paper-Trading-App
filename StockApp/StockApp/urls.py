@@ -5,7 +5,7 @@ URL configuration for StockApp project.
 from django.contrib import admin
 from django.urls import path, include
 
-from user_auth_and_profiles.views import home, LoginView, SignUpForm
+from user_auth_and_profiles.views import home_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),

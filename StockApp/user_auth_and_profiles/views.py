@@ -8,7 +8,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.decorators import login_required
 from .models import Profile
 
-def home(request):
+def home_view(request):
     return render(request, 'user_auth_and_profiles/home.html')
 
 class sign_up_view(View):
