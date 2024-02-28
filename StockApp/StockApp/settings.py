@@ -25,8 +25,8 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'api_app',
     'sentiment_analysis_app',
+    'stock_data_app',
     'stock_tracker_app',
-    'stocks_management_app',
     'user_auth_and_profiles',
     'django.contrib.admin',
     'django.contrib.auth',
