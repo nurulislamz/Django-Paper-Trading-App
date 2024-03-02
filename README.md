@@ -47,3 +47,8 @@ Infrastructure as Code - Terraform
 Dependency Management - Poetry
 Code Quality and Linting - flake8
 Testing - pytest/selenium
+
+https://www.reddit.com/r/django/comments/leg89q/i_created_a_web_app_that_lets_you_practice/
+https://github.com/Flagsmith/flagsmith/tree/main/api
+https://github.com/sebst/pythonic-news?source=post_page-----707c963b4a66--------------------------------
+https://github.com/healthchecks/healthchecks?source=post_page-----707c963b4a66--------------------------------
