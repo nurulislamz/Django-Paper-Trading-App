@@ -1,8 +1,7 @@
 from django.urls import path
-from .views import base
+from .views import search_view
 
 
 urlpatterns = [
-    path('', base, name='base'),
-    # path('edit_profile/', UserEditForm, name='edit_profile')
+    path('', search_view.as_view(), name='search_page'),
 ]
