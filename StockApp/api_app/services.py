@@ -66,7 +66,7 @@ class tiingoNewsAPI(tiingoAPI):
         response = requests.get("https://api.tiingo.com/tiingo/news/bulk_download")
         return response
 
-class tiingoCryptoAPI(self):
+class tiingoCryptoAPI(tiingoAPI):
     def __init__(self, tickers):
         self.ticker = ticker
         

@@ -3,6 +3,8 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 
 from .forms import StockSearch
+from api_app.services import tiingoStockAPI
+
 
 # Create your views here.
 class search_view(View):
@@ -22,3 +24,4 @@ class search_view(View):
             messages.success(request, f'searching stock: {stock_search}')
             
             return render(request, self.template_name, {"form": form, "stock_search": stock_search})
+        
