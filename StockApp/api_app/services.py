@@ -11,6 +11,10 @@ class tiingoAPI:
     def __init__(self, api_key):
         self.api_key = api_key
         self.base_url = "https://api.tiingo.com/tiingo/"
+        self.headers = {
+                        'Content-Type': 'application/json',
+                        'Authorization' : 'Token' + self.apikey
+                        }
         
     def __test__(self):
         headers = {

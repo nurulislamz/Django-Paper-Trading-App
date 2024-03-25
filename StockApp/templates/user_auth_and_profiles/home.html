@@ -18,7 +18,7 @@
         <hr class="my-4">
         <p class="lead">
             {% if not user.is_authenticated %}
-                <a href="{% url 'sign_up_page' %}" class="btn btn-primary btn-lg" role="button">Sign Up</a>
+                <a href="{% url 'signup_page' %}" class="btn btn-primary btn-lg" role="button">Sign Up</a>
                 <a href="{% url 'login_page' %}" class="btn btn-primary btn-lg" role="button">Login</a>
             {% endif %}
         </p>

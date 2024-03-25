@@ -6,8 +6,15 @@ import requests
 ## json 
 ## csv
 
+from dotenv import load_dotenv, dotenv_values
+TIINGO_API_TOKEN = '7eb78fa4eb950d98a130935a693d016ea738cedf'
 
+api_key = TIINGO_API_TOKEN
 
+headers = {
+                'Content-Type': 'application/json',
+                'Authorization' : 'Token' + api_key
+               }
 # get historical data
 
 symbol = "aapl"

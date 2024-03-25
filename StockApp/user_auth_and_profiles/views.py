@@ -11,7 +11,7 @@ from .models import Profile
 def home_view(request):
     return render(request, 'user_auth_and_profiles/home.html')
 
-class sign_up_view(View):
+class signup_view(View):
     form_class = SignUpForm
     initial = {'key': 'value'}
     template_name = 'user_auth_and_profiles/signup.html'
@@ -26,7 +26,7 @@ class sign_up_view(View):
             return redirect(to='/')
 
         # else process dispatch as it otherwise normally would
-        return super(sign_up_view, self).dispatch(request, *args, **kwargs)
+        return super(signup_view, self).dispatch(request, *args, **kwargs)
     
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)

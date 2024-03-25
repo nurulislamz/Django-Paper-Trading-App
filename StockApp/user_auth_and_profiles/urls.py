@@ -1,10 +1,10 @@
 from django.urls import path
-from .views import home_view, sign_up_view, login_view, logout_view, profile_view, reset_password_view, change_password_view #UserEditForm
+from .views import home_view, signup_view, login_view, logout_view, profile_view, reset_password_view, change_password_view #UserEditForm
 from django.contrib.auth.views import PasswordResetConfirmView, LogoutView
 
 urlpatterns = [
     path('', home_view, name='home_page'),
-    path('signup/', sign_up_view.as_view(), name='sign_up_page'),
+    path('signup/', signup_view.as_view(), name='signup_page'),
     path('login/', login_view.as_view(), name='login_page'),
     path('logout/', logout_view.as_view(), name='logout_page'),
     path('profile/', profile_view, name='profile_page'),
