@@ -10,42 +10,54 @@ from dotenv import load_dotenv, dotenv_values
 
 api_key = '7eb78fa4eb950d98a130935a693d016ea738cedf'
 
-import services
+from services import tiingoStockAPI
 
 # get todays data
 
 headers = {
             'Content-Type': 'application/json',
             'Authorization' : 'Token '+ api_key
-            }
+          }
 
 requestResponse = requests.get("https://api.tiingo.com/api/test/", headers=headers)
 print(requestResponse.json())
 
-# get historical data
-
-symbol = "aapl"
+# get todays data
+ticker = "aapl"
 startDate = {}
 
-historicalResponse = requests.get("https://api.tiingo.com/tiingo/daily/aapl/prices?startDate=2024-03-04& \
-                                   format=csv",
-                                   headers=headers)
-print(historicalResponse.json())
+stockApi = tiingoStockAPI(api_key=api_key, ticker=ticker)
+print(stockApi.get_current_price())
 
-# get todays data
-currentPriceResponse = requests.get("https://api.tiingo.com/tiingo/daily/<ticker>/prices", 
-                                    headers=headers)
-print(currentPriceResponse.json())
+print(stockApi.get_current_price()['close'])
 
-# meta data for stock
-requestResponse = requests.get("https://api.tiingo.com/tiingo/daily/aapl", 
-                               headers=headers)
+print(stockApi.get_metadata())
 
-print(requestResponse.json())
+
 
 # get meta data about a stock
 requestResponse = requests.get("https://api.tiingo.com/tiingo/daily/aapl", headers=headers)
 print(requestResponse.json())
+
+
+# get historical data
+# historicalResponse = requests.get("https://api.tiingo.com/tiingo/daily/aapl/prices?startDate=2024-03-04& \
+#                                    format=csv",
+#                                    headers=headers)
+# print(historicalResponse.json())
+
+# # # get todays data
+# response = requests.get(f"https://api.tiingo.com/tiingo/daily/{ticker}/prices", 
+#                             headers= headers)
+# print(response.json())
+
+# # meta data for stock
+# requestResponse = requests.get("https://api.tiingo.com/tiingo/daily/aapl", 
+#                                headers=headers)
+
+# print(requestResponse.json())
+
+
 
 # # news data
 
