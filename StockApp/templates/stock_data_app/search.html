@@ -2,9 +2,9 @@
 {% block title %} Home Page {% endblock title %}
 
 {% block content %}
-    <div class="jumbotron">
+    <div class="jumbotron p-5">
         <h1 class="display-10">Search</h1>
-        <hr class="my-4">
+        <hr class="my-1">
         <form method="post">
             {% csrf_token %}
             {% if form.errors %}
@@ -22,8 +22,36 @@
                 <button type="submit" class="btn btn-outline-primary" method = "post" data-mdb-ripple-init>search</button>
             </div>
         </form>
+    </div>    
+    <!-- <p>Searching for this ticker: {{ stock_search }}</p> -->
+    <div id = "chart">
+
+        <h1 class="display-10">{{ current_stock_price }}</h1>
+
+            <canvas id="chart" width="500" height="500"></canvas>
+
+            <div id = "chart-buttons">
+                <button>1D</button>
+                <button>1M</button>
+                <button>3M</button>
+                <button>1Y</button>
+                <button>5Y</button>
+                <button>All</button>
+            </div>
+        </div>
+
+
+
+        <div>
+        </div>
+
+        <h1 class="display-10">Company Description</h1>
+        <div>
+            {{ description }}
+        </div>
 
     </div>
 
+    <p>{{ stock_search }}</p>
 
 {% endblock content %}
