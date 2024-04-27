@@ -19,12 +19,11 @@
             
             <div class="input-group">
                 {{ form.stock_search }}
-                <button type="button" class="btn btn-outline-primary" data-mdb-ripple-init>search</button>
+                <button type="submit" class="btn btn-outline-primary" method = "post" data-mdb-ripple-init>search</button>
             </div>
         </form>
 
     </div>
 
-    <p>{{ stock_search }}</p>
 
 {% endblock content %}
