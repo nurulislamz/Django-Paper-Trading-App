@@ -2,56 +2,92 @@
 {% block title %} Home Page {% endblock title %}
 
 {% block content %}
-    <div class="jumbotron p-5">
-        <h1 class="display-10">Search</h1>
-        <hr class="my-1">
-        <form method="post">
-            {% csrf_token %}
-            {% if form.errors %}
-            <div class="alert alert-danger alert-dismissible" role="alert">
-                <div id="form_errors">
-                    {% for key, value in form.errors.items %}
-                        <strong>{{ value }}</strong>
-                    {% endfor %}
-                </div>
-            </div>
-            {% endif %}
-            
-            <div class="input-group">
-                {{ form.stock_search }}
-                <button type="submit" class="btn btn-outline-primary" method = "post" data-mdb-ripple-init>search</button>
-            </div>
-        </form>
-    </div>    
-    <!-- <p>Searching for this ticker: {{ stock_search }}</p> -->
-    <div id = "chart">
 
-        <h1 class="display-10">{{ current_stock_price }}</h1>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
 
-            <canvas id="chart" width="500" height="500"></canvas>
-
-            <div id = "chart-buttons">
-                <button>1D</button>
-                <button>1M</button>
-                <button>3M</button>
-                <button>1Y</button>
-                <button>5Y</button>
-                <button>All</button>
+<div class="jumbotron p-5">
+    <h1 class="display-10">Search</h1>
+    <hr class="my-1">
+    <form method="post">
+        {% csrf_token %}
+        {% if form.errors %}
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <div id="form_errors">
+                {% for key, value in form.errors.items %}
+                <strong>{{ value }}</strong>
+                {% endfor %}
             </div>
         </div>
+        {% endif %}
 
-
-
-        <div>
+        <div class="input-group">
+            {{ form.stock_search }}
+            <button type="submit" class="btn btn-outline-primary" method="post" data-mdb-ripple-init>search</button>
         </div>
+    </form>
+</div>
 
+{% if stock_search %}
+    <div> 
+        <h1 class="display-10"> {{ company_name }}: {{ current_stock_price }}</h1>
+    </div>
+
+    <div id="chart">
+        <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+
+    <script>
+        price_data = {{ historical_data | safe }}
+
+        
+    var xyValues = [
+        {x:50, y:7},
+        {x:60, y:8},
+        {x:70, y:8},
+        {x:80, y:9},
+        {x:90, y:9},
+        {x:100, y:9},
+        {x:110, y:10},
+        {x:120, y:11},
+        {x:130, y:14},
+        {x:140, y:14},
+        {x:150, y:15}
+    ];
+
+    new Chart("myChart", {
+    type: "scatter",
+    data: {
+    datasets: [{
+        pointRadius: 4,
+        pointBackgroundColor: "rgb(0,0,255)",
+        data: xyValues
+    }]
+    },
+    options: {
+    legend: {display: false},
+    scales: {
+        xAxes: [{ticks: {min: 40, max:160}}],
+        yAxes: [{ticks: {min: 6, max:16}}],
+    }
+    }
+    });
+    </script>
+
+    <div id="chart-buttons">
+            <button>1D</button>
+            <button>1M</button>
+            <button>3M</button>
+            <button>1Y</button>
+            <button>5Y</button>
+            <button>All</button>
+    </div>
+
+    <div>
         <h1 class="display-10">Company Description</h1>
         <div>
             {{ description }}
         </div>
-
     </div>
 
-    <p>{{ stock_search }}</p>
+{% endif %}
 
 {% endblock content %}

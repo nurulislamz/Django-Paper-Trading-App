@@ -42,9 +42,9 @@ class tiingoStockAPI(tiingoAPI):
                                 headers=self.headers)
         return response.json()[0]
         
-    async def get_metadata(self):
-        response = await requests.get(f"https://api.tiingo.com/tiingo/daily/{self.ticker}", headers=headers)
-        return response.json()[0]
+    def get_metadata(self):
+        response = requests.get(f"https://api.tiingo.com/tiingo/daily/{self.ticker}", headers=self.headers)
+        return response.json()
     
 class tiingoNewsAPI(tiingoAPI):
     def __init__(self):
