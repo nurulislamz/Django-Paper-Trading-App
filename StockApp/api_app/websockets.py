@@ -16,8 +16,8 @@ class tiingoWebSocket:
                 'authorization': self.api_key,
                 }
 
-    def __test(self):
-        ws.send(json.dumps(subscribe))
+    def __test__(self):
+        ws.send(json.dumps(self.subscribe))
         for i in range(2):
             print(ws.recv())
             

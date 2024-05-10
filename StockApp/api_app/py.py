@@ -1,43 +1,42 @@
 # testing apis
-import requests
+# import requests
 
 # test    
 # historical data using REST Apis
 ## json 
 ## csv
 
-from dotenv import load_dotenv, dotenv_values
+# from dotenv import load_dotenv, dotenv_values
 
-api_key = '7eb78fa4eb950d98a130935a693d016ea738cedf'
+# api_key = '7eb78fa4eb950d98a130935a693d016ea738cedf'
 
-from services import tiingoStockAPI
-
-# get todays data
-
-headers = {
-            'Content-Type': 'application/json',
-            'Authorization' : 'Token '+ api_key
-          }
-
-requestResponse = requests.get("https://api.tiingo.com/api/test/", headers=headers)
-print(requestResponse.json())
+# from services import tiingoStockAPI
 
 # get todays data
-ticker = "aapl"
-startDate = {}
 
-stockApi = tiingoStockAPI(api_key=api_key, ticker=ticker)
-print(stockApi.get_current_price())
+# headers = {
+#             'Content-Type': 'application/json',
+#             'Authorization' : 'Token '+ api_key
+#           }
 
-print(stockApi.get_current_price()['close'])
+# requestResponse = requests.get("https://api.tiingo.com/api/test/", headers=headers)
+# print(requestResponse.json())
 
-print(stockApi.get_metadata())
+# # get todays data
+# ticker = "aapl"
+# startDate = {}
 
+# stockApi = tiingoStockAPI(api_key=api_key, ticker="asd")
+# # print(stockApi.get_current_price())
+
+# # print(stockApi.get_current_price()['close'])
+
+# print(stockApi.get_metadata())
 
 
 # get meta data about a stock
-requestResponse = requests.get("https://api.tiingo.com/tiingo/daily/aapl", headers=headers)
-print(requestResponse.json())
+# requestResponse = requests.get("https://api.tiingo.com/tiingo/daily/aapl", headers=headers)
+# print(requestResponse.json())
 
 
 # get historical data
@@ -112,9 +111,9 @@ print(requestResponse.json())
 
 # websocket for real time stream data             
 
-# from websocket import create_connection
-# import simplejson as json
-# ws = create_connection("wss://api.tiingo.com/test")
+from websocket import create_connection
+import simplejson as json
+ws = create_connection("wss://api.tiingo.com/test")
 
 # subscribe = {
 #                 'eventName':'subscribe',
@@ -123,21 +122,34 @@ print(requestResponse.json())
 #                             }
 #                 }
 
+unsubscribe = {
+                'eventName':'unsubscribe',
+                'eventData': {
+                            'authToken': '7eb78fa4eb950d98a130935a693d016ea738cedf'
+                            }                
+              }
+
+
 # ws.send(json.dumps(subscribe))
 # for i in range(2):
 #     print(ws.recv())
     
-# # iex live ticker data
-# ws = create_connection("wss://api.tiingo.com/iex")
+# ws.send(json.dumps(unsubscribe))        
+    
+# iex live ticker data
+ws = create_connection("wss://api.tiingo.com/iex")
 
-# subscribe = {
-#         'eventName':'subscribe',
-#         'authorization':'7eb78fa4eb950d98a130935a693d016ea738cedf',
-#         'eventData': {
-#             'thresholdLevel': 5
-#     }
-# }
+subscribe = {
+        'eventName':'subscribe',
+        'authorization':'7eb78fa4eb950d98a130935a693d016ea738cedf',
+        'eventData': {
+            'thresholdLevel': 5,
+            'ticker':['AAPL', 'GOOGL']
+    }
+}
 
-# ws.send(json.dumps(subscribe))
-# while True:
-#     print(ws.recv())
+ws.send(json.dumps(subscribe))
+for i in range(2):
+    print(ws.recv())
+
+ws.send(json.dumps(unsubscribe))        
