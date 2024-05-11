@@ -8,6 +8,7 @@ import datetime as dt
 
 # Static Data
 class Stock(models.Model):
+    id = models.AutoField(primary_key=True)
     ticker = models.CharField(max_length = 5, unique = True)
     name = models.CharField(max_length = 255)
     description = models.CharField(max_length = 10)
@@ -18,10 +19,10 @@ class Stock(models.Model):
     
 # Dynamic Data
 class StockPrice(models.Model):
-    ticker = models.ForeignKey(Stock, on_delete=models.CASCADE)
+    ticker = models.CharField(max_length = 5, unique = True)
     price = models.DecimalField(max_digits = 10, decimal_places = 2)
     date = models.DateTimeField(default=dt.datetime.now())
-    
-    def __str__(self):
-        return f"{self.symbol} - {self.name}"
                 
+class APICount(models.Model):
+    count = models.IntegerField(default=0)
+    date = models.DateTimeField(default=dt.datetime.now())
