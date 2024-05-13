@@ -1,3 +1,4 @@
+import websocket as ws
 from websocket import create_connection
 import simplejson as json
 
@@ -21,6 +22,9 @@ class tiingoWebSocket:
         for i in range(2):
             print(ws.recv())
             
+    def get_live_stock_data(self):
+        pass
+
     def get_live_crypto_data(self):
         ws = create_connection("wss://api.tiingo.com/crypto")
         

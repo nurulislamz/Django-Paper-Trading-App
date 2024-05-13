@@ -22,7 +22,4 @@ class StockPrice(models.Model):
     ticker = models.CharField(max_length = 5, unique = True)
     price = models.DecimalField(max_digits = 10, decimal_places = 2)
     date = models.DateTimeField(default=dt.datetime.now())
-                
-class APICount(models.Model):
-    count = models.IntegerField(default=0)
-    date = models.DateTimeField(default=dt.datetime.now())
+            

@@ -9,5 +9,6 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('user_auth_and_profiles.urls'), name = "user_auth"),
-    path('stock_data/', include('stock_data_app.urls'), name="stock_data")
+    path('stock_data/', include('stock_data_app.urls'), name="stock_data"),
+    path('portfolio', include('stock_tracker_app.urls'), name="stock_tracker")
 ]

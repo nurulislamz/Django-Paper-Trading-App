@@ -34,7 +34,7 @@ class tiingoStockAPI(tiingoAPI):
     def get_current_price(self):
         response = requests.get(f"https://api.tiingo.com/tiingo/daily/{self.ticker}/prices", 
                                     headers=self.headers)
-        return response.json()
+        return response.json()[0]
         
     async def get_historical_data(self, **kwargs):
         default_date = dt.datetime.today() - dt.timedelta(days=30)
@@ -67,7 +67,7 @@ class tiingoNewsAPI(tiingoAPI):
         return response
 
 class tiingoCryptoAPI(tiingoAPI):
-    def __init__(self, tickers):
+    def __init__(self, ticker):
         self.ticker = ticker
         
     async def get_top_of_book_data(self):

@@ -10,10 +10,10 @@
     <hr class="my-1">
     <form method="post">
         {% csrf_token %}
-        {% if form.errors %}
+        {% if search_form.errors %}
         <div class="alert alert-danger alert-dismissible" role="alert">
             <div id="form_errors">
-                {% for key, value in form.errors.items %}
+                {% for key, value in search_form.errors.items %}
                 <strong>{{ value }}</strong>
                 {% endfor %}
             </div>
@@ -21,7 +21,7 @@
         {% endif %}
 
         <div class="input-group">
-            {{ form.stock_search }}
+            {{ search_form.stock_search }}
             <button type="submit" class="btn btn-outline-primary" method="post" data-mdb-ripple-init>search</button>
         </div>
     </form>
@@ -67,8 +67,6 @@
                         <div class="col">
                             <label for="quantity">Quantity</label>
                             <input type="number" class="form-control" id="quantity" placeholder="Quantity">
-                            <label for="price">Price</label>
-                            <input type="number" class="form-control" id="price" placeholder="Price">
                         </div>
                     </div>
                     <br>
@@ -86,11 +84,13 @@
         </div>
     </div>
 </div>
-
-
-
-
-<div id="chart">
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<!-- <div id="chart">
     <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
 
     <p>{{ historical_data | safe }}</p>
@@ -155,13 +155,14 @@
         <button>5Y</button>
         <button>All</button>
     </div>
+</div> -->
 
+<div>
+    <h1 class="display-10">Company Description</h1>
     <div>
-        <h1 class="display-10">Company Description</h1>
-        <div>
-            {{ description }}
-        </div>
+        {{ description }}
     </div>
+</div>
 
     {% endif %}
 

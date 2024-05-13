@@ -2,12 +2,14 @@ from django.views import View
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
-from .forms import StockSearch
+from .forms import StockSearchForm
 from .models import Stock, StockPrice
 from api_app.services import tiingoStockAPI
 
+import datetime as dt
 import logging
 import json
+import time
 
 logger = logging.getLogger(__name__)
 
@@ -17,14 +19,61 @@ class Retrieve_Stock_Data:
         self.ticker = ticker.upper()
         self.StockAPI = tiingoStockAPI('7eb78fa4eb950d98a130935a693d016ea738cedf', self.ticker)
 
-    def check_ticker_exists_in_cache(self):
+    def check_ticker_exists_in_db(self):
         return Stock.objects.filter(ticker=self.ticker).exists()
     
     def check_ticker_is_valid(self):
         return self.ticker().exists()
 
+    def check_if_api_call_successful(self, api_call):
+        if api_call.get("ticker"):
+            return True
+        elif "limit" in api_call.get("details"):
+            logger.warning("hit api call limit")
+        else: 
+            return False     
+
+    def market_closed(self):
+        is_saturday = True if (dt.datetime.now().weekday() == 5) else False
+        is_sunday = True if (dt.datetime.now().weekday() == 6) else False
+        is_out_of_hours = True if (dt.datetime.now().time() < dt.time(9,30) or dt.datetime.now().time() > dt.time(16,0)) else False
+        
+        return True if (is_saturday or is_sunday or is_out_of_hours) else False
+
+    def stock_price_up_to_date(self):
+        if StockPrice.objects.filter(ticker = self.ticker).exists():
+            is_saturday = True if (dt.datetime.now().weekday() == 5) else False
+            is_sunday = True if (dt.datetime.now().weekday() == 6) else False
+            is_monday_morning = True if (dt.datetime.now().weekday() == False and dt.datetime.now().time() < dt.time(9,30)) else False
+            is_friday_afternoon = True if (dt.datetime.now().weekday() == 4 and dt.datetime.now().time() > dt.time(16,0)) else False
+
+            stock_price_obj = StockPrice.objects.get(ticker = self.ticker)
+            stock_price_time = stock_price_obj.date.time()
+            stock_price_date = stock_price_obj.date.date()
+
+            if stock_price_time == dt.time(0,0,0):
+                if is_saturday and stock_price_date == dt.datetime.now().date() - dt.timedelta(days=1):
+                    logger.warning("uptodate")
+                    return True
+                
+                if is_sunday and stock_price_date == dt.datetime.now().date() - dt.timedelta(days=2) and stock_price_time == "00:00:00":
+                    logger.warning("uptodate")
+                    return True
+
+                if is_monday_morning and stock_price_date == dt.datetime.now().date() - dt.timedelta(days=3):
+                    logger.warning("uptodate")
+                    return True
+                
+                if is_friday_afternoon and stock_price_date == dt.datetime.now().date():
+                    return True
+                
+                if self.market_closed() and stock_price_date == dt.datetime.now().date():
+                    return True
+            else:
+                return False
+
     def create_or_get_metadata(self):
-        logger.warning("Calling API: " + str(not Stock.objects.filter(ticker = self.ticker).exists()))
+        logger.warning("Calling Metadata API: " + str(not Stock.objects.filter(ticker = self.ticker).exists()))
         if not Stock.objects.filter(ticker = self.ticker).exists():
             logger.warning("Object not in Metadata, calling StockAPI")
             metadata = self.StockAPI.get_metadata()
@@ -36,6 +85,7 @@ class Retrieve_Stock_Data:
             
             if not Stock.objects.filter(ticker = self.ticker).exists():
                 logger.warning("Object created in Cache")
+
             else: 
                 logger.warning("Object not created in Cache")
 
@@ -51,40 +101,52 @@ class Retrieve_Stock_Data:
         for data in historical_data:
             parsed_data.append({'x': data['date'], 
                                 'y':  data['close']})
-            
+    
+   
     def create_or_get_latest_stock_price(self):
-        latest_stock_price = {'adjClose': 171.48, 'adjHigh': 172.23, 'adjLow': 170.51, 'adjOpen': 171.75, 'adjVolume': 65672690, 'close': 171.48, 'date': '2024-03-28T00:00:00+00:00', 'divCash': 0.0, 'high': 172.23, 'low': 170.51, 'open': 171.75, 'splitFactor': 1.0, 'volume': 65672690}
+        # check if stock_price is up to date.        
+        if self.stock_price_up_to_date():
+            logger.warning("StockPrice up to date, not calling API")
+            return StockPrice.objects.get(ticker = self.ticker)
 
-        # latest_stock_price = self.StockAPI.get_current_price()
-        logger.warning(latest_stock_price['close'])
+        logger.warning("Calling Stock API.")
+        latest_stock_price = self.StockAPI.get_current_price()
 
         if not StockPrice.objects.filter(ticker = self.ticker).exists():
-            logger.warning(latest_stock_price['close'])
-            logger.warning("Object not in StockPrice, calling StockAPI")
             StockPrice.objects.create(ticker = self.ticker, 
-                                        price = latest_stock_price['close'],
-                                        date = latest_stock_price['date'])
-        else:
+                                        price = latest_stock_price['close'],                                                                                   
+                                        date = latest_stock_price['date'])    
+        else:            
             StockPrice.objects.filter(ticker = self.ticker).update(price = latest_stock_price['close'],
-                                                                    date = latest_stock_price['date'])
+                                                                   date = latest_stock_price['date'])
+
+        return StockPrice.objects.get(ticker = self.ticker)
+
+
+    async def stock_timer(self):
+        await time.sleep(30)
+        latest_stock_price = self.StockAPI.get_current_price()
+
+        StockPrice.objects.filter(ticker = self.ticker).update(price = latest_stock_price['close'],
+                                                                date = latest_stock_price['date'])
 
         return StockPrice.objects.get(ticker = self.ticker)
 
 # Create your views here.
 class search_view(View):
-    form_class = StockSearch
+    search_form_class = StockSearchForm
     initial = {"key": "value"}
     template_name = "stock_data_app/search.html"
 
     def get(self, request, *args, **kwargs):
-        form = self.form_class(initial=self.initial)
-        return render(request, self.template_name, {"form": form})
+        search_form = self.search_form_class(initial=self.initial)
+        return render(request, self.template_name, {"search_form": search_form})
 
     def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
+        search_form = self.search_form_class(request.POST)
         
-        if form.is_valid():
-            ticker = form.cleaned_data.get('stock_search')
+        if search_form.is_valid():
+            ticker = search_form.cleaned_data.get('stock_search')
             
             # messages.success(request, f'searching stock: {stock_search}')
 
@@ -92,9 +154,10 @@ class search_view(View):
             metadata_object = retrieve_Data.create_or_get_metadata()
             latest_stock_price = retrieve_Data.create_or_get_latest_stock_price()
             historical_data = retrieve_Data.get_historical_data()
+            retrieve_Data.stock_timer()
 
             # updates the stock table, caches metadta for frequent api calls
-            context = {"form": form, 
+            context = {"search_form": search_form, 
                        "stock_search": ticker,
                        "company_name": metadata_object.name,
                        "exchange": metadata_object.exchange, 
